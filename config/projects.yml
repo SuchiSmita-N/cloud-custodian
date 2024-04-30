@@ -1,0 +1,5 @@
+projects:
+  - name: suchi-test
+    project_id: suchi-test
+    tags:
+    - test-suchi

@@ -1,0 +1,43 @@
+policies:
+  - name: stop-berlin-vm
+    resource: gcp.instance
+    description: "Stop instances"
+    mode:
+      type: gcp-periodic
+      schedule: "0 19 0 * * *"  #stop at 7pm berlin time 
+      target-type: pubsub
+      tz: "Europe/Berlin"
+      memory-size: 256
+      timeout: '120s'
+      
+      environment:
+        region: europe-west4
+        runtime: python3.11
+    filters:
+      
+      - type: value
+        key: labels.offschedule 
+        value: "test-suchi" 
+    actions:
+      - type: stop
+
+  - name: start-berlin-vm
+    resource: gcp.instance
+    description: "Start instances"
+    mode:
+      type: gcp-periodic
+      schedule: "0 8 * * *"  #start at 8 am Berlin time
+      target-type: pubsub
+      tz: "Europe/Berlin"
+      memory-size: 256
+
+      environment:
+        region: europe-west4
+        runtime: python3.7
+    filters:
+      
+      - type: value
+        key: labels.onschedule 
+        value: "test-suchi"  
+    actions:
+      - type: start
